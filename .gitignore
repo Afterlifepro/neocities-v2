@@ -1,0 +1,23 @@
+### react ###
+.DS_*
+*.log
+logs
+**/*.backup.*
+**/*.back.*
+/src/assets/*
+.vscode/settings.json
+node_modules
+bower_components
+
+*.sublime*
+
+psd
+thumb
+sketch
+
+public/88x31/*
+public/archive/*
+public/Private/*
+public/favicon.ico
+public/screenshot.png
+build/*

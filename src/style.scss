@@ -1,0 +1,856 @@
+// this can compile to a css file but react reads it nativley
+// if you know scss most of this should make sense?
+// also u can see it when you run the app
+// so for that reason + the fact that i cba im not commenting this outside what ive already done
+// maybe ill comment later idk
+
+///////////////
+//   Assets  //
+// (Fonts +) //
+///////////////
+
+// imports the font thats it bbg
+@font-face {
+  font-family: "w95faregular";
+  src: url("./assets/sys/fonts/w95fa-webfont.woff2") format("woff2"),
+    url("./assets/sys/fonts/w95fa-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+* {
+  font-family: inherit;
+}
+
+///////////////
+// Variables //
+///////////////
+
+// can be edited by js:
+:root {
+  // background colour of window
+  --bg-colour: #008282;
+  // colour of the window cap
+  --window-cap-colour: #000082;
+  // colour of the window cap text (should be calculated based on that code from legacy site)
+  --window-cap-text-colour: #fff;
+  // background colour of the body (only change if its /really/ ugly)
+  --window-body-colour: #c3c3c3;
+  // same rules as cap text colour
+  --window-body-text-colour: #000;
+  // scroll colours
+  --scroll-thumb-colour: #aaa;
+  --scroll-bg-colour: #e6e6e6;
+  // font defined here so i can have more fallbacks
+  // made modifiable for accessability
+  font-family: w95faregular, sans-serif;
+  // goober opacity defines if they can be seen (0 = no, 1=yes)
+  --goober-opacity: 1;
+}
+
+// cannot be edited by js:
+$bg-colour: var(--bg-colour);
+$window-cap-colour: var(--window-cap-colour);
+$window-cap-text-colour: var(--window-cap-text-colour);
+$window-body-colour: var(--window-body-colour);
+$window-body-text-colour: var(--window-body-text-colour);
+$border-largest: 10px;
+$border-huge: 7.5px;
+$border-thick: 5px;
+$border-mid: 2.5px;
+$border-thin: 1px;
+$link-colour: #0808cf;
+$link-colour-accent: #8608cf;
+$scroll-thumb-colour: var(--scroll-thumb-colour);
+$scroll-bg-colour: var(--scroll-bg-colour);
+
+////////////
+// Mixins //
+////////////
+
+@mixin indent($border: 5px) {
+  border: $border solid black;
+  border-color: black white white black;
+}
+
+@mixin extrude($border: 5px) {
+  border: $border solid black;
+  border-color: white black black white;
+}
+
+@mixin shadow($width: $border-huge, $height: $border-huge) {
+  box-shadow: $width $height #00000040;
+}
+
+@mixin size($name, $size) {
+  &.#{$name} {
+    width: $size;
+  }
+}
+
+@mixin sizes(
+  $micro: null,
+  $small: null,
+  $normal: null,
+  $large: null,
+  $huge: null,
+  $icon: null
+) {
+  @if $micro != null {
+    @include size(micro, $micro + 0px);
+  }
+  @if $small != null {
+    @include size(small, $small + 0px);
+  }
+  @if $normal != null {
+    @include size(normal, $normal + 0px);
+  }
+  @if $large != null {
+    @include size(large, $large + 0px);
+  }
+  @if $huge != null {
+    @include size(huge, $huge + 0px);
+  }
+  @if $icon != null {
+    @include size(icon, $icon + 0px);
+  }
+}
+
+////////////
+// System //
+////////////
+html {
+  // dont transition
+  transition: 0ms;
+  body {
+    // dont transition
+    transition: 0ms;
+    // remove white edge
+    margin: 0;
+    #app {
+      // dont transition
+      transition: 0ms;
+      // apply bg colour
+      background-color: $bg-colour;
+      // fill screen
+      width: 100vw;
+      height: 100vh;
+      // hide elements which overflow
+      overflow: clip;
+      // apply to position: absolute
+      position: relative;
+    }
+  }
+}
+
+// default features for /every/ element
+*,
+*::before,
+*::after {
+  transition: 250ms;
+}
+
+.window {
+  // include extrusions, shadows, and sizes
+  @include extrude;
+  @include shadow;
+  @include sizes(100, 150, 300, 450, 550);
+  &.min {
+    width: min-content;
+  }
+
+  // apply colouring
+  background-color: $window-body-colour;
+  color: $window-body-text-colour;
+
+  // allow resizing/repositioning
+  display: block;
+  position: absolute;
+
+  // cap code
+  .cap {
+    // colours
+    background-color: $window-cap-colour;
+    color: $window-cap-text-colour;
+    // alignment
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2px;
+    // left aligned content
+    > div {
+      display: flex;
+      align-items: center;
+      font-size: 0.95em;
+
+      // icon
+      img {
+        height: 1.2em;
+        width: 1.2em;
+        object-fit: cover;
+      }
+    }
+  }
+
+  // button that is a close button
+  button:has(.close) {
+    // make it fit the image
+    padding: 0;
+    margin: 0;
+    border: none;
+    // size it
+    height: 14px;
+    width: 16px;
+    // p i x e l s
+    image-rendering: pixelated;
+
+    .close {
+      // werk bitch
+      width: inherit;
+      height: inherit;
+    }
+  }
+
+  .goobers {
+    // allows accessability settings to modify visibility
+    opacity: var(--goober-opacity);
+
+    $height: 64px;
+    position: absolute;
+    top: $height * -1 - 5px;
+    height: $height;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-evenly;
+
+    .goober {
+      border: none;
+      margin: 0;
+      image-rendering: pixelated;
+      height: 32px;
+      min-width: 32px;
+      filter: drop-shadow(5px 5px 5px #00000060);
+
+      &.flip {
+        transform: scaleX(-1);
+      }
+      &.big {
+        height: 64px;
+        min-width: 64px;
+      }
+    }
+  }
+}
+
+// code for max scroll heights
+.winBody {
+  padding: $border-thick;
+  // & > *:last-child {
+  //   margin-block-end: 20px;
+  // }
+  * > & {
+    overflow-y: auto;
+  }
+  .micro > & {
+    max-height: 250px;
+  }
+  .small > & {
+    max-height: 300px;
+  }
+  .normal > & {
+    max-height: 450px;
+  }
+  .large > & {
+    max-height: 550px;
+  }
+  .huge > & {
+    max-height: 550px;
+  }
+
+  .nomax > & {
+    max-height: none;
+  }
+}
+
+.appShortcuts {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min-content;
+  grid-auto-rows: min-content;
+  grid-template-rows: repeat(5, min-content);
+  gap: 0px 0px;
+  .shortcut {
+    width: 100px;
+    height: auto;
+    &,
+    * {
+      background-color: #0000 !important;
+      border: none !important;
+    }
+    img {
+      width: 70%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      image-rendering: pixelated;
+    }
+    h1 {
+      font-size: 1em;
+      font-weight: 900;
+      text-decoration: underline;
+      img {
+        margin: 0 0 0 5px;
+        image-rendering: pixelated;
+        width: 16px;
+      }
+    }
+  }
+}
+/////////////
+// Default //
+//  Styles //
+/////////////
+
+// basic text element
+p,
+div,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ul,
+ol,
+li,
+button,
+a,
+input,
+details,
+summary {
+  font-size: 12pt;
+  margin-block: 0;
+  pre > & {
+    word-break: break-word;
+    white-space: normal;
+  }
+}
+
+// h1-6
+* {
+  @mixin header($level, $size, $weight) {
+    h#{$level} {
+      font-size: $size;
+      font-weight: $weight;
+    }
+  }
+  @include header(1, 2em, 900);
+  @include header(2, 1.5em, 900);
+  @include header(3, 1.3em, 900);
+  @include header(4, 1.3em, 400);
+  @include header(5, 1.1em, 900);
+  @include header(6, 1.1em, 400);
+}
+
+// ul/ol/li
+ul,
+ol {
+  --list-bullet: url("./assets/sys/buttons/right arrow hollow.png");
+  padding-inline-start: 1em;
+  list-style-type: "▹";
+  list-style-image: var(--list-bullet);
+  image-rendering: pixelated;
+
+  ul,
+  ol {
+    --list-bullet: url("./assets/sys/buttons/right arrow.png");
+    list-style-type: "▸";
+    list-style-image: var(--list-bullet);
+  }
+
+  li {
+    display: flex;
+    align-content: center;
+    &::before {
+      content: "";
+      width: 1em;
+      height: 1em;
+      background-image: var(--list-bullet);
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+  }
+}
+
+// table
+table {
+  border-collapse: collapse;
+  margin: 2px;
+  * {
+    border: $border-thin dotted #000000;
+  }
+}
+
+// link
+a {
+  text-decoration: underline;
+  &:link,
+  &:active {
+    color: $link-colour;
+  }
+  &:visited {
+    color: $link-colour-accent;
+  }
+  &:hover {
+    color: $link-colour-accent;
+  }
+}
+
+// button or button link
+button,
+a.button {
+  @include extrude($border-mid);
+
+  background-color: $window-body-colour;
+  padding: $border-mid;
+  margin: $border-thin;
+
+  .micro {
+    width: min-content;
+  }
+
+  &:active :not(.noBorder) {
+    @include indent($border-mid);
+  }
+}
+
+// audio
+// using AudioPlayer from module "react-h5-audio-player"
+// using "react-h5-audio-player/src/styles.scss" as base
+.audioPlayer {
+  @include extrude;
+  $accent: #fff;
+  $filled: $window-cap-colour;
+  $empty: #ffffff50;
+  $clip-pixel-sphere-8x: polygon(
+    37.5% 0%,
+    62.5% 0%,
+    62.5% 12.5%,
+    75% 12.5%,
+    87.5% 12.5%,
+    87.5% 37.5%,
+    100% 37.5%,
+    100% 62.5%,
+    87.5% 62.5%,
+    87.5% 87.5%,
+    63.5% 87.5%,
+    63.5% 100%,
+    37.5% 100%,
+    37.5% 87.5%,
+    12.5% 87.5%,
+    12.5% 62.5%,
+    0 62.5%,
+    0 37.5%,
+    12.5% 37.5%,
+    12.5% 12.5%,
+    37.5% 12.5%
+  );
+
+  display: flex;
+  flex-direction: row;
+  &:has(.big) {
+    flex-direction: column;
+  }
+  width: 95%;
+  margin: auto;
+  margin-block: 10px;
+
+  transition: none;
+  color: $accent;
+  * {
+    color: inherit !important;
+    transition: inherit !important;
+  }
+
+  .rhap_container {
+    background-color: #00000000;
+    box-shadow: none;
+    min-width: 300px;
+  }
+
+  .rhap_button-clear img {
+    border: none;
+    margin: 0;
+    height: 100%;
+    image-rendering: pixelated;
+  }
+
+  .rhap_progress-bar {
+    background-color: $empty;
+    .rhap_progress-filled {
+      background-color: $filled;
+    }
+
+    .rhap_progress-indicator {
+      background-color: $accent;
+      border-radius: 0;
+      clip-path: $clip-pixel-sphere-8x;
+      top: -7.5px;
+    }
+  }
+
+  .rhap_volume-container {
+    .rhap_volume-bar {
+      z-index: 0;
+      background-color: $empty;
+      .rhap_volume-indicator {
+        background-color: $accent;
+        z-index: 0;
+        opacity: 1;
+        clip-path: $clip-pixel-sphere-8x;
+        border-radius: 0;
+      }
+      .rhap_volume-filled {
+        background-color: $filled;
+        z-index: -1;
+      }
+    }
+  }
+
+  img.cover {
+    height: 88px;
+    margin: 0;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-width: 0;
+    border-right: 5px solid black;
+    &.big {
+      width: 100%;
+      height: auto;
+    }
+  }
+}
+
+// img
+img {
+  @include extrude();
+  @include sizes(80, 150, 200, 250, 300, 25);
+  margin-block: $border-thick;
+  &.fill {
+    width: 95%;
+    margin-block: $border-thin;
+  }
+  .cap & {
+    border: none;
+    margin: 0;
+  }
+}
+
+// input
+input {
+  // text
+  &[type="text"] {
+    @include indent($border-mid);
+
+    background-color: #fff;
+    padding: $border-mid;
+    margin: $border-thin;
+  }
+
+  &[type="radio"] {
+    // editable properties:
+    // on/off colours
+    // size
+    $on: white;
+    $off: white;
+    $borders: 2px;
+    $size: 10px;
+
+    // apply size
+    height: $size;
+    width: $size;
+
+    // propper cursor for accessability
+    cursor: pointer;
+
+    // margin block to add space below prev element
+    margin-block-start: 2px;
+    // add borders and account for them
+    @include indent($borders);
+    box-sizing: content-box;
+    // rounded edges
+    border-radius: 100%;
+
+    // hide basic checkbox
+    appearance: none;
+    -webkit-appearance: none;
+    // allow resizing
+    display: inline-block;
+
+    // off colour
+    background-color: $off;
+
+    // allow positioning of toggle properly
+    position: relative;
+
+    &::before {
+      // off state
+
+      // remove content
+      content: "";
+      // make a hollow circle (12 edges)
+      clip-path: polygon(
+        50% 0%,
+        25% 7%,
+        7% 25%,
+        0% 50%,
+        7% 75%,
+        25% 93%,
+        50% 100%,
+        75% 93%,
+        93% 75%,
+        100% 50%,
+        93% 25%,
+        75% 7%,
+        50% 0%,
+        50% 25%,
+        65.22% 34.78%,
+        75% 50%,
+        66.67% 66.67%,
+        50% 75%,
+        33.33% 66.67%,
+        25% 50%,
+        33.33% 33.33%,
+        50% 25%
+      );
+      background-color: black;
+
+      // calc and apply height and width
+      width: 8px;
+      height: 8px;
+      // position in parent
+      position: absolute;
+      top: 1px;
+      left: 1px;
+
+      opacity: 0;
+    }
+
+    &:checked {
+      // on state
+      background-color: $on;
+
+      &::before {
+        opacity: 1;
+      }
+    }
+  }
+
+  &[type="checkbox"] {
+    // editable properties:
+    // on/off colours
+    // size
+    $on: white;
+    $off: white;
+    $borders: 2px;
+    $size: 10px;
+
+    // apply size
+    height: $size;
+    width: $size;
+
+    // propper cursor for accessability
+    cursor: pointer;
+
+    // margin block to add space below prev element
+    margin-block-start: 2px;
+    // add borders and account for them
+    @include indent($borders);
+    box-sizing: content-box;
+
+    // hide basic checkbox
+    appearance: none;
+    -webkit-appearance: none;
+    // allow resizing
+    display: inline-block;
+
+    // off colour
+    background-color: $off;
+
+    // allow positioning of toggle properly
+    position: relative;
+
+    &::before {
+      // off state
+
+      // remove content
+      content: "";
+      // make a checkmark
+      clip-path: polygon(
+        17% 54%,
+        28% 43%,
+        38% 54%,
+        70% 22%,
+        81% 33%,
+        38% 75%,
+        17% 54%
+      );
+      background-color: black;
+
+      // calc and apply height and width
+      width: 12px;
+      height: 12px;
+      // position in parent
+      position: absolute;
+      top: -1px;
+      left: -1px;
+
+      opacity: 0;
+    }
+
+    &:checked {
+      // on state
+      background-color: $on;
+
+      &::before {
+        opacity: 1;
+      }
+    }
+  }
+}
+// textarea
+textarea {
+  @include indent($border-mid);
+
+  background-color: #fff;
+  padding: $border-mid;
+  margin: $border-thin;
+}
+
+// detail + summary
+details {
+  @include extrude($border-mid);
+
+  width: fit-content;
+  padding: $border-mid;
+  margin: $border-thin;
+
+  summary {
+    list-style-image: url("./assets/sys/buttons/right arrow.png");
+    image-rendering: pixelated;
+  }
+  &[open] summary {
+    list-style-image: url("./assets/sys/buttons/down arrow.png");
+  }
+}
+
+// scroll bar
+* {
+  scrollbar-width: auto;
+  scrollbar-color: $scroll-thumb-colour $scroll-bg-colour;
+}
+
+/////////////
+// Classes //
+/////////////
+
+// indent
+.indent {
+  @include indent;
+}
+
+// extrude
+.extrude {
+  @include extrude;
+}
+
+// checkbox.switch
+input[type="checkbox"].switch {
+  // editable properties:
+  // margin on inside of switch,
+  // size of border,
+  // size of toggle,
+  // and width of switch
+  $margin: 2px;
+  $borders: 1px;
+  $toggleSize: 10px;
+  $switchWidth: $toggleSize * 2 + $margin;
+  $on: blue;
+  $off: black;
+
+  // calculate height and width of switch
+  $height: $toggleSize + (2 * $margin);
+  $width: $switchWidth + (2 * $margin);
+
+  // apply height and width
+  height: $height;
+  width: $width;
+
+  // propper cursor for accessability
+  cursor: pointer;
+
+  // margin block to add space below prev element
+  margin-block-start: 2px;
+  // add borders and account for them
+  @include indent($borders);
+  box-sizing: content-box;
+
+  // hide basic checkbox
+  appearance: none;
+  -webkit-appearance: none;
+  // allow resizing
+  display: inline-block;
+
+  // off colour
+  background-color: $off;
+
+  // allow positioning of toggle properly
+  position: relative;
+
+  &::before {
+    // off state
+    // add border and account for it
+    @include extrude($borders);
+    box-sizing: content-box;
+
+    // remove content
+    content: "";
+    // calc and apply height and width
+    width: $toggleSize - $borders * 2;
+    height: $toggleSize - $borders * 2;
+    // position in parent
+    position: absolute;
+    left: $margin;
+    top: $margin;
+
+    // revert vanilla checkbox changes
+    opacity: 1;
+    clip-path: none;
+
+    // fill colour
+    background-color: white;
+  }
+
+  &:checked {
+    // on state
+    background-color: $on;
+
+    &::before {
+      // move to rigght of parent
+      left: $width - $toggleSize - $margin;
+    }
+  }
+}
+
+// grow on hover
+.hoverGrow {
+  scale: 1;
+  z-index: 0;
+  position: relative;
+  &:hover {
+    scale: 3;
+    z-index: 9999;
+  }
+}
