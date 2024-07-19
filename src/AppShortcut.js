@@ -19,7 +19,7 @@ export default function AppShortcut({ icon, title, href, externalShortcut }) {
             }
       }
     >
-      <img src={icon} alt={title} />
+      <img src={icon} alt="" />
       <h1>
         {title}
         {externalShortcut ? (
