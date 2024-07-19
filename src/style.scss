@@ -394,8 +394,10 @@ table {
 }
 
 // link
-a {
+a,
+.link {
   text-decoration: underline;
+  &,
   &:link,
   &:active {
     color: $link-colour;
@@ -421,8 +423,16 @@ a.button {
     width: min-content;
   }
 
-  &:active :not(.noBorder) {
-    @include indent($border-mid);
+  &:active:not(.noBorder) {
+    border-color: black white white black;
+  }
+
+  // button for accessability but must look like a link
+  &.link {
+    border: none;
+    background: #0000;
+    padding: 0;
+    margin: 0;
   }
 }
 

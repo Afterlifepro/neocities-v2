@@ -12,7 +12,8 @@ export function Welcome() {
       <p>You can drag the windows around by clicking the bar at the top!</p>
       <p>
         If you want to share it click{" "}
-        <a
+        <button
+          className="link"
           style={{ cursor: "pointer" }}
           onClick={() => {
             globals.newApp({
@@ -22,9 +23,10 @@ export function Welcome() {
           }}
         >
           here
-        </a>
+        </button>
         , or if you want to see other sites I liked, click{" "}
-        <a
+        <button
+          className="link"
           style={{ cursor: "pointer" }}
           onClick={() => {
             globals.newApp({
@@ -34,7 +36,7 @@ export function Welcome() {
           }}
         >
           here!
-        </a>
+        </button>
       </p>
       <p>
         Theres a few other things to look at, so feel free to have a snoop! You

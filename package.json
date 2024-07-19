@@ -25,8 +25,9 @@
     "assets": "python src\\assets\\assetImportGenerator.py",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "sass": "sass style.scss style.css",
-    "serve": "cd build && npx serve"
+    "sass": "cd src && sass style.scss style.css",
+    "serve": "cd build && npx serve",
+    "neocities-build": "npm run build && cd build && neocities push ."
   },
   "eslintConfig": {
     "extends": "react-app"
