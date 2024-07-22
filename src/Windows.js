@@ -67,6 +67,7 @@ export function CloseButton({ delID }) {
 
   return (
     <button
+      data-closes-id={delID}
       onClick={() => {
         global.deleteApp(delID);
       }}
@@ -87,6 +88,7 @@ export function Window({
   children,
   delID,
   size = "normal",
+  source,
 }) {
   // state for coords
   const coordsRange = Math.min(
@@ -150,6 +152,8 @@ export function Window({
     // add size based on size classes in object
     <div
       data-title={title}
+      data-id={delID}
+      data-source={source}
       className={"window " + size}
       style={{
         // apply coords :D

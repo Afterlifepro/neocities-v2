@@ -31,6 +31,7 @@ export class App {
         key={this.key}
         delID={this.key}
         size={this.size}
+        source={this.source}
       />
     );
   }

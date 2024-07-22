@@ -1,7 +1,5 @@
 import React, { createContext, useState } from "react";
 import { App } from "./App";
-import assets from "./Assets";
-import { Welcome } from "./Welcome";
 
 // new class for global objects
 class GlobalsClass {
@@ -12,8 +10,10 @@ class GlobalsClass {
   setKeys;
   setRenderPropState;
   pages;
+  init;
 
   constructor() {
+    this.init = false;
     // default this.apps to an empty array
     this.apps = [];
     // fallback function for this.setApps
@@ -26,6 +26,10 @@ class GlobalsClass {
     // fallback for setKeys
     this.setKeys = (value) => {
       console.error("not a state. failed to setKeys() to:", value);
+      return;
+    };
+    this.setRenderPropState = (value) => {
+      console.error("not a state. failed to setRenderPropState() to:", value);
       return;
     };
   }
@@ -54,6 +58,12 @@ class GlobalsClass {
     content = undefined, // used every time
     size = undefined, // used for custom apps
   }) {
+    console.debug(
+      "creating new app\n" +
+        (name ? "name: " + name : title ? "title: " + title : "no title"),
+      "\nsource:",
+      source
+    );
     let returnApp;
     // generate app object from name (look it up in pages var)
     if (name !== undefined && this.pages !== undefined) {
@@ -107,16 +117,17 @@ export const GlobalsImport = Globals;
 // Component used in index.js
 export function GlobalsContextComponent({ children }) {
   // init states like this (doesnt cause rerender on setThing)
+  console.log("start init states");
   [Globals.keys, Globals.setKeys] = useState(0);
   [Globals.apps, Globals.setApps] = useState([
-    new App({
-      title: "Welcome!!",
-      icon: assets.system.icons.cube,
-      content: <Welcome />,
-      source: "init",
-      key: -1,
-      size: "normal",
-    }),
+    // new App({
+    //   title: "Welcome!!",
+    //   icon: assets.system.icons.cube,
+    //   content: <Welcome />,
+    //   source: "init",
+    //   key: -1,
+    //   size: "normal",
+    // }),
   ]);
   // create state for rerendering (doesnt use correct value)
   // children of  this component get renderPropState so they update
@@ -124,6 +135,9 @@ export function GlobalsContextComponent({ children }) {
   let [renderPropState, setRenderPropState] = useState([0]);
   // gotta put it here
   Globals.setRenderPropState = setRenderPropState;
+  console.log("start initing");
+  Globals.init = true;
+  console.log("inited");
 
   return (
     <GlobalsContext.Provider value={Globals}>

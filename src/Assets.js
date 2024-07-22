@@ -728,6 +728,11 @@ const assets = {
       site: "https://gifypet.neocities.org/",
     },
     {
+      name: "Venuvenom",
+      src: "https://venuvenom.neocities.org/images/webbutton1.gif",
+      site: "https://venuvenom.neocities.org/"
+    },
+    {
       name: "Wikipedia",
       src: "https://upload.wikimedia.org/wikipedia/commons/a/aa/Wikipedia-button_88x31.png?20070531122019",
       site: "https://en.wikipedia.org/wiki/User:Afterlifepro",
