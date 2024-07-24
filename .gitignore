@@ -18,6 +18,7 @@ sketch
 public/88x31/*
 public/archive/*
 public/Private/*
+public/rss/*
 public/favicon.ico
 public/screenshot.png
 build/*
