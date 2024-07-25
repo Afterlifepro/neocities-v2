@@ -861,8 +861,10 @@ export function Welcome() {
       <ul>
         <li>Getting my old fanfic stuff added</li>
         <li>Add themes</li>
-        <li>Add an RSS feed of website updates</li>
-        <li>Add an RSS feed of personal updates</li>
+        <li className="done"><button className="link" onclick={() => {globals.newApp({name: "rssSite", source: "welcome app"})}}>Add an RSS feed of website updates</button></li>
+        <li className="done"><button className="link" onclick={() => {globals.newApp({name: "rssBlog", source: "welcome app"})}}>Add an RSS feed of personal updates</button></li>
+        <li>Write some blog posts</li>
+        <li>D&D Character Pages</li>
         <li>...</li>
       </ul>
       <p>

@@ -369,6 +369,11 @@ ol {
     list-style-type: "▸";
     list-style-image: var(--list-bullet);
   }
+
+  li.done {
+    list-style-type: "✔";
+    list-style-image: url("./assets/sys/buttons/tick.png");
+  }
 }
 
 // table
