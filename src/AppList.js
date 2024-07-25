@@ -320,6 +320,30 @@ function Rss({ rss }) {
     return (
       <div>
         <h1>{title}</h1>
+        <a
+          className="button"
+          href={rss}
+          style={{
+            height: "1.75em",
+            width: "1.75em",
+            padding: "0",
+            position: "absolute",
+            top: "calc(1.5em + 5px)",
+            right: "5px",
+          }}
+        >
+          <img
+            style={{
+              width: "80%",
+              aspectRatio: 1,
+              border: 0,
+              marginBlock: "10%",
+              marginInline: "10%",
+            }}
+            src={assets.system.icons.rss}
+            alt="Rss Feeds"
+          />
+        </a>
         <h6>
           {lastBuildDate.getDate()}/{lastBuildDate.getMonth()}/
           {lastBuildDate.getFullYear()} {lastBuildDate.getHours()}:
@@ -733,9 +757,9 @@ const RssIndex = () => {
       The RSS feeds I have hooked up to my site! Currently they're a little
       glitchy when you open new ones but I'll deal w that later!
       <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(3, 1fr)"
-      }}>
+          display: "grid",
+          gridTemplateColumns: "repeat(3, 1fr)"
+        }}>
         <button
           onClick={() => {
             globals.newApp({ name: "rssSite", source: "rss index" });
