@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import assets from "./Assets";
 
 export default function MobileWarn() {
@@ -25,7 +24,7 @@ export default function MobileWarn() {
         >
           <div className="cap">
             <div>
-              <img src={assets.system.icons.help} alt="" /> Mobile Users Beware!
+              <img src={assets.system.icons.windows} alt="" /> Mobile Users Beware!
             </div>
           </div>
           <div className="winBody">
