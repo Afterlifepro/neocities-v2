@@ -56,7 +56,7 @@ import cog from "./assets/sys/icons/w95_22.png";
 import search from "./assets/sys/icons/w95_45.png";
 import paper from "./assets/sys/icons/w95_17.png"
 // images
-import doctorWho from "./assets/images/doctor who.bmp";
+import doctorWho from "./assets/images/doctor who.png";
 import doctorWho1011 from "./assets/images/dw10 11.avif";
 import doctorWhoGay from "./assets/images/dw gayyyy.png";
 // gifs
