@@ -21,4 +21,5 @@ public/Private/*
 public/rss/*
 public/favicon.ico
 public/screenshot.png
+public/.gitignore
 build/*

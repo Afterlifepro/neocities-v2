@@ -6,7 +6,7 @@ import { CloseButton } from "./Windows";
 import AppShortcut from "./AppShortcut";
 
 // base react features
-import { Suspense, useContext, useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 
 // audio player
 import AudioPlayer from "react-h5-audio-player";
@@ -270,6 +270,8 @@ function Rss({ rss }) {
           An error occoured when retriving the RSS feed: {error.message}
         </div>
       );
+
+    console.log(data);
     const parsed = parser.parseFromString(data, "text/xml");
 
     const channel = parsed.documentElement.children[0];
@@ -719,6 +721,46 @@ function AppManager() {
     </>
   );
 }
+
+///////////
+//  RSS  //
+// Index //
+///////////
+const RssIndex = () => {
+  const globals = useContext(GlobalsContext);
+  return (
+    <>
+      The RSS feeds I have hooked up to my site! Currently they're a little
+      glitchy when you open new ones but I'll deal w that later!
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(3, 1fr)"
+      }}>
+        <button
+          onClick={() => {
+            globals.newApp({ name: "rssSite", source: "rss index" });
+          }}
+        >
+          Site Updates 💻
+        </button>
+        <button
+          onClick={() => {
+            globals.newApp({ name: "rssBlog", source: "rss index" });
+          }}
+        >
+          Blog Posts 📜
+        </button>
+        <button
+          onClick={() => {
+            globals.newApp({ name: "rssMicro", source: "rss index" });
+          }}
+        >
+          Mini Posts 🦐
+        </button>
+      </div>
+    </>
+  );
+};
 
 //////////////
 // Standard //
@@ -1586,6 +1628,32 @@ function onGlobalsLoad() {
       size: "huge nomax",
     }),
 
+    // rss feeds
+    rss: new App({
+      title: "RSS Feeds!",
+      icon: assets.system.icons.paper,
+      content: <RssIndex />,
+      size: "normal nomax",
+    }),
+    rssSite: new App({
+      title: "Site Updates",
+      icon: assets.system.icons.paper,
+      content: <Rss rss={process.env.PUBLIC_URL + "/rss/feeds/site.rss"} />,
+      size: "normal",
+    }),
+    rssBlog: new App({
+      title: "Blog Posts",
+      icon: assets.system.icons.paper,
+      content: <Rss rss={process.env.PUBLIC_URL + "/rss/feeds/blog.rss"} />,
+      size: "normal",
+    }),
+    rssMicro: new App({
+      title: "Micro Posts",
+      icon: assets.system.icons.paper,
+      content: <Rss rss={process.env.PUBLIC_URL + "/rss/feeds/micro.rss"} />,
+      size: "normal",
+    }),
+
     // gifs
     gifs: new App({
       title: "Gifs",
@@ -1790,11 +1858,7 @@ function onGlobalsLoad() {
     debugRSS: new App({
       title: "RSS Debugger",
       icon: assets.system.icons.help,
-      content: (
-        <Suspense fallback={<div>Loading...</div>}>
-          <Rss rss={process.env.PUBLIC_URL + "/rss/test.rss"} />
-        </Suspense>
-      ),
+      content: <Rss rss={process.env.PUBLIC_URL + "/rss/test.rss"} />,
       size: "normal ",
     }),
   };
@@ -1844,6 +1908,7 @@ export default function AppShortcuts() {
         externalShortcut
       />
       <AppShortcut title="Debug" href="debug" icon={assets.system.icons.help} />
+      <AppShortcut title="RSS" href="rss" icon={assets.system.icons.paper} />
       <AppShortcut
         title="Github"
         href="https://github.com/Afterlifepro/neocities"
