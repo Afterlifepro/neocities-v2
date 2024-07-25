@@ -12,9 +12,10 @@ export default function MobileWarn() {
           alignItems: "center",
           position: "absolute",
         }}
+        className="renderIfTouchScreen"
         >
         <div
-          className="renderIfTouchScreen window"    
+          className="window"    
           style={{
             zIndex: 999,
             minWidth: "150px",
