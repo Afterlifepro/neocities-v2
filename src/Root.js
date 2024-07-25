@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { GlobalsContext } from "./Globals";
 import "./style.scss";
 import AppShortcuts from "./AppList";
+import MobileWarn from "./MobileWarn";
 
 function Root() {
   // grab globals via context as it is most likely more stable
@@ -9,6 +10,7 @@ function Root() {
 
   return (
     <>
+      <MobileWarn />
       <AppShortcuts />
       {/* apps list */}
       {globals.apps.length > 0

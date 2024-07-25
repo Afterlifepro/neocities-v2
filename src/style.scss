@@ -856,3 +856,14 @@ input[type="checkbox"].switch {
     z-index: 9999;
   }
 }
+
+
+// detect if device is touchscreen
+.renderIfTouchScreen {
+  opacity: 0;
+}
+@media (pointer: coarse) {
+  .renderIfTouchScreen {
+    opacity: 1;
+  }
+}
