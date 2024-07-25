@@ -866,5 +866,6 @@ input[type="checkbox"].switch {
 @media (pointer: coarse) {
   .renderIfTouchScreen {
     opacity: 1;
+    display: unset;
   }
 }
