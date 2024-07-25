@@ -861,7 +861,7 @@ input[type="checkbox"].switch {
 // detect if device is touchscreen
 .renderIfTouchScreen {
   opacity: 0;
-  display: none !important;
+  display: none;
 }
 @media (pointer: coarse) {
   .renderIfTouchScreen {
