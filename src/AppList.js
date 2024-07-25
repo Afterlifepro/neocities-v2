@@ -1,12 +1,23 @@
+// my components/assets/etc
 import { App } from "./App";
 import { GlobalsContext, GlobalsImport } from "./Globals";
 import assets from "./Assets";
-import { useContext, useRef, useState } from "react";
 import { CloseButton } from "./Windows";
 import AppShortcut from "./AppShortcut";
 
+// base react features
+import { Suspense, useContext, useRef, useState } from "react";
+
+// audio player
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/src/styles.scss";
+
+// react-query for rss
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from "@tanstack/react-query";
 
 ////////////
 // Assets //
@@ -227,6 +238,134 @@ function Gallery({ images, cover }) {
   );
 }
 
+// used to do queries via react router
+const queryClient = new QueryClient();
+
+function Rss({ rss }) {
+  const globals = useContext(GlobalsContext);
+
+  // component that actually does rss parsing etc
+  function RssComponent({ rss }) {
+    // used to interprit the feed
+    const parser = new DOMParser();
+
+    // retrive the feed
+    const { isPending, error, data } = useQuery({
+      queryKey: ["rssFeed"],
+      queryFn: () => fetch(rss).then((res) => res.text()),
+    });
+
+    // loading state
+    if (isPending) return <div style={{ cursor: "wait" }}>Loading...</div>;
+
+    // error state
+    if (error)
+      return (
+        <div
+          style={{
+            background: "#ff000080",
+            cursor: "not-allowed",
+          }}
+        >
+          An error occoured when retriving the RSS feed: {error.message}
+        </div>
+      );
+    const parsed = parser.parseFromString(data, "text/xml");
+
+    const channel = parsed.documentElement.children[0];
+
+    const title = channel.children[0].textContent.trim();
+    const description = channel.children[1].textContent.trim();
+    const lastBuildDate = new Date(channel.children[3].textContent.trim());
+    let items = [];
+    for (let i = 5; i < channel.children.length; i++) {
+      items.push(channel.children[i]);
+    }
+
+    console.log(
+      parsed,
+      channel,
+      channel.children,
+      title,
+      description,
+      lastBuildDate,
+      items
+    );
+
+    const urlSearchString = window.location.search;
+
+    const params = new URLSearchParams(urlSearchString);
+
+    const postIndex = parseInt(params.get("post"));
+    if (!Number.isNaN(postIndex) && items[postIndex]) {
+      const i = postIndex;
+      const item = items[i];
+      GlobalsImport.newApp({
+        title: item.children[0].textContent,
+        content: (
+          <div
+            dangerouslySetInnerHTML={{
+              __html: item.children[1].textContent,
+            }}
+          ></div>
+        ),
+        icon: assets.system.icons.paper,
+        size: "large",
+        source: "RSS Auto opener",
+      });
+    }
+
+    return (
+      <div>
+        <h1>{title}</h1>
+        <h6>
+          {lastBuildDate.getDate()}/{lastBuildDate.getMonth()}/
+          {lastBuildDate.getFullYear()} {lastBuildDate.getHours()}:
+          {lastBuildDate.getMinutes()}
+        </h6>
+        <p>{description}</p>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(2, 1fr)",
+          }}
+        >
+          {items.map((item, i) => {
+            return (
+              <button
+                onClick={() => {
+                  globals.newApp({
+                    title: item.children[0].textContent,
+                    content: (
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: item.children[1].textContent,
+                        }}
+                      ></div>
+                    ),
+                    icon: assets.system.icons.paper,
+                    size: "large",
+                    source: "RSS component",
+                  });
+                }}
+                key={i}
+              >
+                {item.children[0].textContent}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+  // react router boilerplate
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RssComponent rss={rss} />
+    </QueryClientProvider>
+  );
+}
+
 ///////////
 // Debug //
 ///////////
@@ -241,113 +380,129 @@ function Debug() {
       <h2>Debug Menu</h2>
       <h4>Open debug apps</h4>
       <ul>
-        <li>Test Windows</li>
-        <ul>
-          <li>
-            <button
-              onClick={() => {
-                globals.newApp({ name: "debugtest", source: "debug menu" });
-              }}
-            >
-              Generic Window
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={() => {
-                globals.newApp({ name: "debugmicro", source: "debugger" });
-              }}
-            >
-              Micro
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={() => {
-                globals.newApp({ name: "debugsmall", source: "debugger" });
-              }}
-            >
-              Small
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={() => {
-                globals.newApp({ name: "debugnormal", source: "debugger" });
-              }}
-            >
-              Normal
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={() => {
-                globals.newApp({ name: "debuglarge", source: "debugger" });
-              }}
-            >
-              Large
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={() => {
-                globals.newApp({ name: "debughuge", source: "debugger" });
-              }}
-            >
-              Huge
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={() => {
-                globals.newApp({ name: "debugLargeAudio", source: "debugger" });
-              }}
-            >
-              MP3 Player
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={() => {
-                globals.newApp({ name: "debugGallery", source: "debugger" });
-              }}
-            >
-              Gallery
-            </button>
-          </li>
-        </ul>
-        <li>System Apps</li>
-        <ul>
-          <li>
-            <button
-              onClick={() => {
-                globals.newApp({ name: "debugIDs", source: "debugger" });
-              }}
-            >
-              Task Manager
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={() => {
-                globals.newApp({ name: "debugApps", source: "debugger" });
-              }}
-            >
-              App Manager
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={() => {
-                globals.apps.map((apps) => {
-                  return globals.deleteApp(apps.key);
-                });
-              }}
-            >
-              Close All Apps
-            </button>
-          </li>
-        </ul>
+        <li>
+          Test Windows
+          <ul>
+            <li>
+              <button
+                onClick={() => {
+                  globals.newApp({ name: "debugtest", source: "debug menu" });
+                }}
+              >
+                Generic Window
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => {
+                  globals.newApp({ name: "debugmicro", source: "debugger" });
+                }}
+              >
+                Micro
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => {
+                  globals.newApp({ name: "debugsmall", source: "debugger" });
+                }}
+              >
+                Small
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => {
+                  globals.newApp({ name: "debugnormal", source: "debugger" });
+                }}
+              >
+                Normal
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => {
+                  globals.newApp({ name: "debuglarge", source: "debugger" });
+                }}
+              >
+                Large
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => {
+                  globals.newApp({ name: "debughuge", source: "debugger" });
+                }}
+              >
+                Huge
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => {
+                  globals.newApp({
+                    name: "debugLargeAudio",
+                    source: "debugger",
+                  });
+                }}
+              >
+                MP3 Player
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => {
+                  globals.newApp({ name: "debugGallery", source: "debugger" });
+                }}
+              >
+                Gallery
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => {
+                  globals.newApp({ name: "debugRSS", source: "debugger" });
+                }}
+              >
+                RSS
+              </button>
+            </li>
+          </ul>
+        </li>
+        <li>
+          System Apps
+          <ul>
+            <li>
+              <button
+                onClick={() => {
+                  globals.newApp({ name: "debugIDs", source: "debugger" });
+                }}
+              >
+                Task Manager
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => {
+                  globals.newApp({ name: "debugApps", source: "debugger" });
+                }}
+              >
+                App Manager
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => {
+                  globals.apps.map((apps) => {
+                    return globals.deleteApp(apps.key);
+                  });
+                }}
+              >
+                Close All Apps
+              </button>
+            </li>
+          </ul>
+        </li>
       </ul>
     </>
   );
@@ -387,10 +542,14 @@ function Test() {
             Lorem ipsum dolor sit amet
           </a>
         </li>
-        <ol>
-          <li>Lorem ipsum dolor sit amet consectetur</li>
-          <li>Ipsam,</li>
-        </ol>
+        <li>
+          {" "}
+          Lorem
+          <ol>
+            <li>Lorem ipsum dolor sit amet consectetur</li>
+            <li>Ipsam,</li>
+          </ol>
+        </li>
       </ul>
       <button>Lorem ipsum dolor sit amet</button>
       <br />
@@ -632,14 +791,14 @@ export function Welcome() {
       </p>
       <p>
         Heres a list of the future planned features (in no particular order):
-        <ul>
-          <li>Getting my old fanfic stuff added</li>
-          <li>Add themes</li>
-          <li>Add an RSS feed of website updates</li>
-          <li>Add an RSS feed of personal updates</li>
-          <li>...</li>
-        </ul>
       </p>
+      <ul>
+        <li>Getting my old fanfic stuff added</li>
+        <li>Add themes</li>
+        <li>Add an RSS feed of website updates</li>
+        <li>Add an RSS feed of personal updates</li>
+        <li>...</li>
+      </ul>
       <p>
         Finally, heres a link to my
         <a href="/archive/v1/"> Old site (17/07/2024 and before)</a>
@@ -1626,6 +1785,17 @@ function onGlobalsLoad() {
       icon: assets.system.icons.help,
       content: <AppManager />,
       size: "normal",
+    }),
+
+    debugRSS: new App({
+      title: "RSS Debugger",
+      icon: assets.system.icons.help,
+      content: (
+        <Suspense fallback={<div>Loading...</div>}>
+          <Rss rss={process.env.PUBLIC_URL + "/rss/test.rss"} />
+        </Suspense>
+      ),
+      size: "normal ",
     }),
   };
 

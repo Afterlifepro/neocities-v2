@@ -54,6 +54,7 @@ import pc from "./assets/sys/icons/w95_46.png";
 import imgs from "./assets/sys/icons/w95_20.png";
 import cog from "./assets/sys/icons/w95_22.png";
 import search from "./assets/sys/icons/w95_45.png";
+import paper from "./assets/sys/icons/w95_17.png"
 // images
 import doctorWho from "./assets/images/doctor who.bmp";
 import doctorWho1011 from "./assets/images/dw10 11.avif";
@@ -217,6 +218,7 @@ const assets = {
       imgs: imgs,
       cog: cog,
       search: search,
+      paper: paper,
     },
     buttons: {
       audio: {

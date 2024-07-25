@@ -369,19 +369,6 @@ ol {
     list-style-type: "▸";
     list-style-image: var(--list-bullet);
   }
-
-  li {
-    display: flex;
-    align-content: center;
-    &::before {
-      content: "";
-      width: 1em;
-      height: 1em;
-      background-image: var(--list-bullet);
-      background-position: center;
-      background-repeat: no-repeat;
-    }
-  }
 }
 
 // table
