@@ -43,6 +43,7 @@
   // font defined here so i can have more fallbacks
   // made modifiable for accessability
   font-family: w95faregular, sans-serif;
+  --mono-font-family: monospace;
   // goober opacity defines if they can be seen (0 = no, 1=yes)
   --goober-opacity: 1;
 }
@@ -62,6 +63,9 @@ $link-colour: #0808cf;
 $link-colour-accent: #8608cf;
 $scroll-thumb-colour: var(--scroll-thumb-colour);
 $scroll-bg-colour: var(--scroll-bg-colour);
+$monofont: var(--mono-font-family);
+$code-bg: #333333;
+$code-colour: #c3c3c3;
 
 ////////////
 // Mixins //
@@ -329,13 +333,21 @@ button,
 a,
 input,
 details,
-summary {
+summary,
+code {
   font-size: 12pt;
   margin-block: 0;
   pre > & {
     word-break: break-word;
     white-space: normal;
   }
+}
+
+code {
+  font-family: $monofont;
+  border: 1px solid $code-bg;
+  background-color: $window-body-colour;
+  padding-inline: 1px;
 }
 
 // h1-6
