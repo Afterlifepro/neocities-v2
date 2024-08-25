@@ -183,10 +183,8 @@ import coverdancing from "./assets/images/audioCover/You Me Dancing.jpg";
 
 // audios
 const songdirtMan = "https://www.dropbox.com/scl/fi/mdkcb54s26dqh1sa0ku3r/Dirt-Man.mp3?rlkey=piceds6l48qg86fye2d2nuswi&st=5yiidqoi&dl=1"; // require("./assets/audio/Dirt Man.mp3");
-const songanything =
-  "https://www.dropbox.com/scl/fi/9p7p8x3brijv5x1q2vu3q/ANYTHING-4-U.mp3?rlkey=pcyl0jxrjy5n6q9fylfqq5bjr&st=1a1e2zo0&dl=1"; // require("./assets/audio/ANYTHING 4 U.mp3");
-const songbreak =
-  "https://www.dropbox.com/scl/fi/7ujz4n4x2zmj6dn3qgz0s/Break.mp3?rlkey=2npusdhxtqnv75al20xgih2ld&st=zln4tyfi&dl=1"; // require("./assets/audio/Break.mp3");
+const songanything = "https://www.dropbox.com/scl/fi/9p7p8x3brijv5x1q2vu3q/ANYTHING-4-U.mp3?rlkey=pcyl0jxrjy5n6q9fylfqq5bjr&st=1a1e2zo0&dl=1"; // require("./assets/audio/ANYTHING 4 U.mp3");
+const songbreak = "https://www.dropbox.com/scl/fi/7ujz4n4x2zmj6dn3qgz0s/Break.mp3?rlkey=2npusdhxtqnv75al20xgih2ld&st=zln4tyfi&dl=1"; // require("./assets/audio/Break.mp3");
 const songcest = "https://www.dropbox.com/scl/fi/3c8kudln0ccylmr0lwh04/C-est-La-Vie.mp3?rlkey=lzotnpbwqg2i0e0ochtq2whva&st=2vkr33sm&dl=1"; // require("./assets/audio/C'est La Vie.mp3");
 const songcall = "https://www.dropbox.com/scl/fi/p6mac1qvg512ua9frjn3s/Call-Me-When-You-Get-There.mp3?rlkey=js9hkxts9abrb61gu6rn0mqum&st=1vl16o3t&dl=1"; // require("./assets/audio/Call Me When You Get There.mp3");
 const songcassiopeia = "https://www.dropbox.com/scl/fi/37r3gevwnaoq54cs3g8ps/Cassiopeia.mp3?rlkey=wl0xxevuk55ookym3qquzgdp9&st=kmvmzy7j&dl=1"; // require("./assets/audio/Cassiopeia.mp3");
@@ -194,7 +192,7 @@ const songpostal = "https://www.dropbox.com/scl/fi/mrrorps6gi5bu8v4ejigj/Going-P
 const songricky = "https://www.dropbox.com/scl/fi/463uov8nfynuo93qxzobs/Hi-I-m-Ricky.mp3?rlkey=vptof7swni8u7t09qupifebt3&st=zzz4eumj&dl=1"; // require("./assets/audio/Hi, I'm Ricky.mp3");
 const songcrow = "https://www.dropbox.com/scl/fi/t687y2t4w6vimss12kj2r/Kleptomaniacrow.mp3?rlkey=air450xkj0le79n8pz0ebq8ce&st=cni2yjfg&dl=1"; // require("./assets/audio/Kleptomaniacrow.mp3");
 const songnight = "https://www.dropbox.com/scl/fi/s2nyiqp663bng9w02m53y/Last-Night.mp3?rlkey=4swk4ajzinjh8uyqx0fxqyzws&st=ayglsl5u&dl=1"; // require("./assets/audio/Last Night.mp3");
-const songlemon = "https://www.dropbox.com/scl/fi/i017to9rkaksx47wo1pyh/Lemon-Stealing-Whore.mp3?rlkey=n7mbyux13p45kwifimk27g66j&st=w38ap71a&dl=1"; // require("./assets/audio/Lemon Stealing Whore.mp3");
+const songlemon = "https://www.dropbox.com/scl/fi/s2nyiqp663bng9w02m53y/Last-Night.mp3?rlkey=4swk4ajzinjh8uyqx0fxqyzws&st=ayglsl5u&dl=1"; // require("./assets/audio/Lemon Stealing Whore.mp3");
 const songpaladin = "https://www.dropbox.com/scl/fi/n0yzaxnn1wl86y2hssc3x/Paladin-Straight.mp3?rlkey=qx5chmgs4vfrhkhjv1tkd9oiq&st=7jdypg98&dl=1"; // require("./assets/audio/Paladin Straight.mp3");
 const songscumbag = "https://www.dropbox.com/scl/fi/6ax1docoqb06nzg2qys4o/SCUMBAG.mp3?rlkey=dgrhnrqoes001737bynyr09x5&st=r8lvkpzf&dl=1"; // require("./assets/audio/SCUMBAG.mp3");
 const songwallow = "https://www.dropbox.com/scl/fi/p93s7x34yoyc8h8jlzrt4/Wallows-Song.mp3?rlkey=rf2gaprh2vqfb2g0gtaz3g80v&st=fetq5725&dl=1"; // require("./assets/audio/Wallows Song.mp3");
