@@ -1,0 +1,410 @@
+<div id="gui">
+  <div id="screen">
+    <img
+      id="music-logo"
+      src="http://img.youtube.com/vi/Y6k3sMgobP4/maxresdefault.jpg"
+    />
+    <div class="marquee">
+      <p id="song-name">&nbsp;</p>
+    </div>
+  </div>
+  <div id="controls">
+    <img
+      src="https://lilithdev.neocities.org/shrine/vg/nso/sprites/music_prev.png"
+      id="music-prev"
+    />
+    <img
+      src="https://lilithdev.neocities.org/shrine/vg/nso/sprites/music_play.png"
+      id="music-toggle"
+    />
+    <img
+      src="https://lilithdev.neocities.org/shrine/vg/nso/sprites/music_next.png"
+      id="music-next"
+    />
+    <img
+      id="volume-icon"
+      src="https://lilithdev.neocities.org/shrine/vg/nso/sprites/music_volume_100.png"
+    />
+  </div>
+</div>
+
+<div id="player"></div>
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Chivo+Mono:ital,wght@0,100..900;1,100..900&display=swap");
+  iframe {
+    display: none;
+  }
+  html,
+  body,
+  #gui {
+    width: 100%;
+    height: 625px;
+    margin: 0;
+    padding: 0;
+    overflow: clip;
+  }
+  #gui {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: min-content;
+    grid-auto-rows: min-content;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 15px 0px;
+    grid-template-areas:
+      "screen"
+      "options";
+    background-color: #da3e95;
+    background-image: linear-gradient(
+      to left,
+      #93255b,
+      transparent 10%,
+      #ffffff40 35%,
+      #ffffff40 65%,
+      transparent 90%,
+      #93255b
+    );
+    padding: 15px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    border-bottom-left-radius: 50% 5px;
+    border-bottom-right-radius: 50% 5px;
+    border-top-left-radius: 50% 5px;
+    border-top-right-radius: 50% 5px;
+  }
+  #screen {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: black;
+  }
+  #music-logo {
+    grid-area: screen;
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+  }
+  #song-name {
+    width: 100%;
+    font-family: "Chivo Mono", monospace;
+    color: #dbe0e0;
+  }
+  #controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 0px 0px;
+    grid-template-areas:
+      ". play ."
+      "back . forward"
+      ". volume .";
+    grid-area: options;
+    aspect-ratio: 1/1;
+    background-image: url("./buttonbg.svg");
+    background-size: contain;
+    img {
+      width: 75%;
+      aspect-ratio: 1/1;
+      object-fit: contain;
+      image-rendering: pixelated;
+      margin: auto;
+      filter: brightness(0%);
+    }
+    #music-prev {
+      grid-area: back;
+    }
+    #music-toggle {
+      grid-area: play;
+    }
+    #music-next {
+      grid-area: forward;
+    }
+    #volume-icon {
+      grid-area: volume;
+    }
+  }
+
+  .marquee {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+
+    p {
+      padding-left: 50%;
+      margin-block: 0;
+      animation: marquee 7s linear infinite;
+
+      @media (prefers-reduced-motion: reduce) {
+        animation: none;
+      }
+    }
+  }
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+</style>
+<script>
+  const nodes = {
+    playButton: document.getElementById("music-toggle"),
+    previousButton: document.getElementById("music-prev"),
+    nextButton: document.getElementById("music-next"),
+    logoImg: document.getElementById("music-logo"),
+    titleText: document.getElementById("song-name"),
+    volumeIcon: document.getElementById("volume-icon"),
+  };
+
+  const params = new URLSearchParams(window.location.search);
+  const list = params.get("list");
+
+  const imgUrlPlay = {
+    play: "https://lilithdev.neocities.org/shrine/vg/nso/sprites/music_play.png",
+    pause:
+      "https://lilithdev.neocities.org/shrine/vg/nso/sprites/music_pause.png",
+    loading:
+      "https://lilithdev.neocities.org/shrine/vg/nso/sprites/music_load.gif",
+  };
+
+  const imgUrlVolume = {
+    normal:
+      "https://lilithdev.neocities.org/shrine/vg/nso/sprites/music_volume_100.png",
+    low: "https://lilithdev.neocities.org/shrine/vg/nso/sprites/music_volume_100.png",
+    lowest:
+      "https://lilithdev.neocities.org/shrine/vg/nso/sprites/music_volume_100.png",
+    mute: "https://lilithdev.neocities.org/shrine/vg/nso/sprites/music_volume_mute.png",
+  };
+
+  function formatTime(seconds) {
+    if (seconds >= 60 * 60)
+      return new Date(seconds * 1000).toISOString().slice(11, 19);
+    else return new Date(seconds * 1000).toISOString().slice(14, 19);
+  }
+
+  let cachedIcon = imgUrlVolume.normal;
+  nodes.volumeIcon.addEventListener("click", (e) => {
+    if (player) {
+      if (player.isMuted()) {
+        nodes.volumeIcon.src = cachedIcon;
+        player.unMute();
+      } else {
+        cachedIcon = nodes.volumeIcon.src;
+        nodes.volumeIcon.src = imgUrlVolume.mute;
+        player.mute();
+      }
+    }
+  });
+
+  let seeking = false;
+
+  function setPlaybackFromMouse(bar, fill, pointerX, allowSeekAhead) {
+    if (!player) return;
+
+    var rect = bar.getBoundingClientRect();
+    let ratio = (pointerX - rect.left) / rect.width;
+    ratio = Math.min(Math.max(ratio, 0), 1);
+    let newTime = ratio * player.getDuration();
+
+    fill.style.width = ratio * 100 + "%";
+    player.seekTo(newTime, allowSeekAhead);
+  }
+
+  function setVolumeFromMouse(bar, fill, pointerX) {
+    var rect = bar.getBoundingClientRect();
+    let newVolume = ((pointerX - rect.left) / rect.width) * 100;
+    newVolume = Math.min(Math.max(newVolume, 0), 100);
+
+    fill.style.width = newVolume + "%";
+
+    if (player) {
+      player.unMute();
+      player.setVolume(newVolume);
+    }
+
+    if (newVolume >= 50) {
+      nodes.volumeIcon.src = imgUrlVolume.normal;
+    } else if (newVolume < 50 && newVolume >= 20) {
+      nodes.volumeIcon.src = imgUrlVolume.low;
+    } else if (newVolume < 20 && newVolume > 0) {
+      nodes.volumeIcon.src = imgUrlVolume.lowest;
+    } else {
+      nodes.volumeIcon.src = imgUrlVolume.mute;
+    }
+    //volumeIcon
+  }
+
+  // 3. This function creates an <iframe> (and YouTube player)
+  //    after the API code downloads.
+  var player;
+  function onYouTubeIframeAPIReady() {
+    player = new YT.Player("player", {
+      height: "200",
+      width: "200",
+      playerVars: {
+        playsinline: 1,
+        disablekb: 1,
+        controls: 0,
+        list: list,
+        index: params.has("index") ? params.get("index") : 0,
+        loop: 1,
+      },
+      events: {
+        onReady: onPlayerReady,
+        onStateChange: onPlayerStateChange,
+      },
+    });
+  }
+  window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
+
+  // 4. The API will call this function when the video player is ready.
+  function onPlayerReady(event) {
+    event.target.setVolume(10);
+    event.target.setLoop(true);
+
+    nodes.volumeIcon.src = imgUrlVolume.lowest;
+
+    /*if(params.has("index"))*/
+
+    //titleText.innerHTML = player.getVideoData().title;
+    updateVideoInfo(event.target.getVideoData());
+
+    /*event.target.setShuffle({'shufflePlaylist' : 1});
+  event.target.nextVideo();
+  titleText.innerHTML = player.getVideoData().title;
+  event.target.setShuffle({'shufflePlaylist' : 0});
+  event.target.stopVideo();*/
+    //playRandomTrack();
+
+    nodes.playButton.addEventListener("click", function () {
+      togglePlay();
+    });
+    nodes.previousButton.addEventListener("click", function () {
+      player.previousVideo();
+    });
+    nodes.nextButton.addEventListener("click", function () {
+      player.nextVideo();
+    });
+
+    window.top.postMessage(
+      {
+        type: "setWebcamState",
+        animation: "banger",
+        force: true,
+        close: false,
+        focus: false,
+      },
+      location.origin
+    );
+    //window.top.postMessage({type:'musicStarted'}, location.origin);
+  }
+  // 5. The API calls this function when the player's state changes.
+  //    The function indicates that when playing a video (state=1),
+  //    the player should play for six seconds and then stop.
+  function onPlayerStateChange(event) {
+    /*if (event.data == YT.PlayerState.PLAYING) {
+    setTimeout(stopVideo, 6000);
+    done = true;
+  }*/
+    updateGraphics(event.data);
+  }
+
+  /*
+    YT.PlayerState.ENDED or 0
+    YT.PlayerState.PLAYING or 1
+    YT.PlayerState.PAUSED or 2
+    YT.PlayerState.BUFFERING or 3
+    YT.PlayerState.CUED or 5
+*/
+
+  function togglePlay() {
+    /*console.log(JSON.stringify(player));*/
+    if (
+      player.getPlayerState() == YT.PlayerState.PAUSED ||
+      player.getPlayerState() == YT.PlayerState.BUFFERING ||
+      player.getPlayerState() == YT.PlayerState.CUED
+    ) {
+      player.playVideo();
+    } else if (
+      player.getPlayerState() == YT.PlayerState.PLAYING ||
+      player.getPlayerState() == YT.PlayerState.ENDED ||
+      player.getPlayerState() == YT.PlayerState.BUFFERING
+    ) {
+      player.pauseVideo();
+    }
+  }
+
+  function updateGraphics(state) {
+    var newSrc;
+    if (player.getVideoData().title != undefined)
+      updateVideoInfo(player.getVideoData());
+    /*if(state == YT.PlayerState.PLAYING) newSrc = "index/music_pause.png";
+  if(state == YT.PlayerState.PAUSED) newSrc = "index/music_play.png";*/
+    if (state == YT.PlayerState.PLAYING) newSrc = imgUrlPlay.pause;
+    if (state == YT.PlayerState.PAUSED) newSrc = imgUrlPlay.play;
+    if (state == YT.PlayerState.BUFFERING || state == YT.PlayerState.CUED)
+      newSrc = imgUrlPlay.loading;
+    if (newSrc && newSrc !== nodes.playButton.src)
+      nodes.playButton.src = newSrc;
+  }
+
+  function updateVideoInfo(info) {
+    nodes.titleText.innerText = info.title;
+    nodes.logoImg.src =
+      "http://img.youtube.com/vi/" + info.video_id + "/mqdefault.jpg";
+    nodes.logoImg.parentNode.href = player.getVideoUrl();
+    //"https://www.youtube.com/watch?v=QoGM9hCxr4k&list=PLVszhPDEAN1oPkYIJMstNyEKrjFrRyEDZ
+    /*linkButton.href = "https://youtu.be/" + player.getVideoData().video_id;*/
+  }
+
+  const nodeInput = document.getElementById("custom-input");
+  function createPlaylist() {
+    let url = nodeInput.value;
+    let urlPart = url.split("?");
+    if (urlPart.length != 2) return;
+
+    let trueUrl = "?" + urlPart[1];
+
+    const params = new URLSearchParams(trueUrl);
+
+    console.log(params);
+
+    if (params.has("list")) {
+      // Old method, rest in peace
+      /*window.top.postMessage({
+      type: "openApp",
+      app: "music",
+      options: {list:params.get('list'),index:params.has('index') ? params.get('index') : 0}
+    }, location.origin);
+    document.getElementById('custom-playlist').style.display = 'none';*/
+      // New method that let's this be used outside of the shrine
+      let newURL = new URL(document.location);
+      newURL.searchParams.set("list", params.get("list"));
+      newURL.searchParams.set(
+        "index",
+        params.has("index") ? params.get("index") : 0
+      );
+      console.log(newURL.href);
+      window.location.href = newURL.href;
+    }
+  }
+
+  window.addEventListener("message", (e) => {
+    var css = e.data,
+      head = document.head,
+      style = document.createElement("style");
+
+    head.appendChild(style);
+
+    style.type = "text/css";
+    if (style.styleSheet) {
+      style.styleSheet.cssText = css;
+    } else {
+      style.appendChild(document.createTextNode(css));
+    }
+  });
+</script>
+<script src="https://www.youtube.com/iframe_api"></script>

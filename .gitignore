@@ -23,3 +23,7 @@ public/favicon.ico
 public/screenshot.png
 public/.gitignore
 build/*
+public/shrines/*.png
+public/shrines/*.jpg
+public/shrines/*/assets/*.png
+public/shrines/*/assets/*.jpg
