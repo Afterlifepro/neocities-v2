@@ -8,6 +8,7 @@ import {
 } from "react";
 import { GlobalsContext } from "./Globals";
 import assets from "./Assets";
+import { contrastingColor } from "./colourUtils";
 
 // this is the component for goobers!
 // its like. really messy
@@ -88,6 +89,7 @@ export function Window({
   children,
   delID,
   size = "normal",
+  colour = null,
   source,
 }) {
   // state for coords
@@ -160,6 +162,8 @@ export function Window({
         left: `${posX.toString().concat("px")}`,
         top: `${posY.toString().concat("px")}`,
         transition: "0s",
+        "--cap-colour": colour ? "#" + colour : null,
+        "--cap-text-colour": colour ? "#" + contrastingColor(colour) : null,
       }}
     >
       <Goobers

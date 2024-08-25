@@ -57,6 +57,7 @@ import search from "./assets/sys/icons/w95_45.png";
 import paper from "./assets/sys/icons/w95_17.png"
 import rss from "./assets/sys/icons/rss.svg"
 import windows from "./assets/sys/icons/w95_40.png"
+import shrine from "./assets/sys/icons/w95_21.png"
 // images
 import doctorWho from "./assets/images/doctor who.png";
 import doctorWho1011 from "./assets/images/dw10 11.avif";
@@ -223,6 +224,7 @@ const assets = {
       paper: paper,
       rss: rss,
       windows: windows,
+      shrine: shrine,
     },
     buttons: {
       audio: {

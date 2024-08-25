@@ -55,6 +55,7 @@ class GlobalsClass {
     source = undefined, // used for custom apps
     title = undefined, // used for custom apps
     icon = undefined, // used for custom apps
+    colour = undefined, // used for custom apps
     content = undefined, // used every time
     size = undefined, // used for custom apps
   }) {
@@ -81,6 +82,7 @@ class GlobalsClass {
         title: pageInUse.title,
         icon: pageInUse.icon,
         content: pageInUse.content,
+        colour: pageInUse.colour || null,
         // source is stored mainly for debugging purposes - if you need to see where an app is from you can console.log it
         source: source + " => Globals.newApp({name})",
         key: this.getKey(),
@@ -93,6 +95,7 @@ class GlobalsClass {
         title: title,
         icon: icon,
         content: content,
+        colour: colour,
         source: source + " => Globals.newApp({title, icon, content})",
         key: this.getKey(),
         size: size,

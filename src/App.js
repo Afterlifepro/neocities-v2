@@ -7,6 +7,7 @@ export class App {
   source;
   key;
   size;
+  colour;
   constructor({
     title,
     icon,
@@ -14,13 +15,15 @@ export class App {
     source = "Unknown",
     key = undefined,
     size = "normal",
+    colour = null,
   }) {
     this.title = title;
     this.icon = icon;
     this.content = content;
     this.source = source;
     this.key = key;
-    this.size= size
+    this.size= size;
+    this.colour = colour;
   }
   getJSX() {
     return (
@@ -31,6 +34,7 @@ export class App {
         key={this.key}
         delID={this.key}
         size={this.size}
+        colour={this.colour}
         source={this.source}
       />
     );

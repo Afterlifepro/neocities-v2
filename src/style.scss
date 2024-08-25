@@ -162,6 +162,10 @@ html {
     width: min-content;
   }
 
+  // allow colour overrides
+  $window-cap-colour: var(--cap-colour, var(--window-cap-colour));
+  $window-cap-text-colour: var(--cap-text-colour, var(--window-cap-text-colour));
+
   // apply colouring
   background-color: $window-body-colour;
   color: $window-body-text-colour;
@@ -227,6 +231,7 @@ html {
     flex-direction: row;
     align-items: flex-end;
     justify-content: space-evenly;
+    pointer-events: none;
 
     .goober {
       border: none;
@@ -284,7 +289,7 @@ html {
   grid-auto-flow: column;
   grid-auto-columns: min-content;
   grid-auto-rows: min-content;
-  grid-template-rows: repeat(5, min-content);
+  grid-template-rows: repeat(6, min-content);
   gap: 0px 0px;
   .shortcut {
     width: 100px;
@@ -869,7 +874,6 @@ input[type="checkbox"].switch {
   }
 }
 
-
 // detect if device is touchscreen
 .renderIfTouchScreen {
   opacity: 0;
@@ -880,4 +884,19 @@ input[type="checkbox"].switch {
     opacity: 1;
     display: flex;
   }
+}
+
+// code to scale iframe
+.wrap {
+  width: 100%;
+  aspect-ratio: 1;
+  padding: 0;
+  overflow: hidden;
+}
+.frame {
+  --_scale: var(--scale, 1);
+  width: calc(100% / var(--_scale));
+  aspect-ratio: 1;
+  scale: var(--_scale);
+  transform-origin: 0 0;
 }

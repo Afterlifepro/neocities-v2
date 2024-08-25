@@ -15,10 +15,9 @@ import { Welcome } from "./apps/Welcome";
 import { AppManager, Debug, TaskManager, Test } from "./apps/Debug";
 import { RssIndex } from "./apps/RSS";
 import { Settings } from "./apps/Settings";
-import { ShareSite,CoolSites } from "./apps/OtherSites";
+import { ShareSite, CoolSites } from "./apps/OtherSites";
 import { standardPages } from "./apps/standardPages";
-
-
+import { Shrines, Shrine } from "./apps/Shrines";
 
 ////////////
 // Fanfic //
@@ -143,8 +142,6 @@ export const writing = {
   },
 };
 
-
-
 //////////
 // Site //
 //  Dev //
@@ -208,6 +205,23 @@ function onGlobalsLoad() {
       size: "huge nomax",
     }),
 
+    // shrines
+    shrines: new App({
+      title: "Shrines",
+      icon: assets.system.icons.shrine,
+      content: <Shrines />,
+      size: "small nomax",
+    }),
+
+    shrinesTaynil: new App({
+      title: "taynil's shrine",
+      icon: assets.system.icons.shrine,
+      content: <Shrine title={"taynil's shrine"} url={"./shrines/taynil"} />,
+      size: "normal",
+      colour: "da3e95",
+      source: "shrine manager",
+    }),
+    
     // rss feeds
     rss: new App({
       title: "RSS Feeds!",
@@ -495,6 +509,7 @@ export default function AppShortcuts() {
         icon={assets.system.icons.folder}
         externalShortcut
       />
+      <AppShortcut title="Shrines" href="shrines" icon={assets.system.icons.shrine} />
     </div>
   );
 }
