@@ -28,3 +28,4 @@ public/shrines/*.jpg
 public/shrines/*/assets/*.png
 public/shrines/*/assets/*.jpg
 public/screenshotEmpty.png
+public/shrines/*

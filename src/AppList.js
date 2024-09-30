@@ -18,6 +18,7 @@ import { Settings } from "./apps/Settings";
 import { ShareSite, CoolSites } from "./apps/OtherSites";
 import { standardPages } from "./apps/standardPages";
 import { Shrines, Shrine } from "./apps/Shrines";
+import SpookySeason from "./apps/spookySeason";
 
 ////////////
 // Fanfic //
@@ -279,6 +280,15 @@ function onGlobalsLoad() {
       icon: assets.system.icons.imgs,
       content: <standardPages.gifs.Zelda />,
       size: "large",
+    }),
+
+    // seasonal
+    seasonalSpooky: new App({
+      title: "It's Nearly October",
+      icon: assets.images.gifs.misc.skull.src,
+      content: <SpookySeason />,
+      size: "small",
+      colour: "000000"
     }),
 
     // writing

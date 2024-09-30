@@ -3,6 +3,7 @@ import { GlobalsContext } from "./Globals";
 import "./style.scss";
 import AppShortcuts from "./AppList";
 import MobileWarn from "./MobileWarn";
+import BouncingKing from "./bouncingKing";
 
 function Root() {
   // grab globals via context as it is most likely more stable
@@ -20,6 +21,7 @@ function Root() {
             return app.getJSX();
           })
         : null}
+      <BouncingKing />
     </>
   );
 }

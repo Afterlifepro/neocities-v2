@@ -128,6 +128,8 @@ import tumblre4bb3f6b46adb8d8ee1af593e0821a9bf34c894e400 from "./assets/images/g
 import tumblrf12a84322ac7a28381319619fb59fc4c6d52111c400 from "./assets/images/gifs/tumblr_f12a84322ac7a28381319619fb59fc4c_6d52111c_400.webp";
 import zeldabotwlinkeatsrockszeldabotw from "./assets/images/gifs/zelda-bot-w-link-eats-rocks-zelda-bot-w.gif";
 
+import skullSpinning from "./assets/images/gifs/skull.gif"
+
 // not OC images (idk why i called em that but icons)
 import doctorWhoNotOC from "./assets/images/non OC/doctorWho.png";
 import d20NotOC from "./assets/images/non OC/d20.png";
@@ -699,7 +701,12 @@ const assets = {
           abr: "zeldabotwlinkeatsrockszeldabotw",
         },
       ],
-      misc: [],
+      misc: {
+        skull: {
+          src: skullSpinning,
+          alt: "A rotating skull",
+        }
+      },
     },
   },
 

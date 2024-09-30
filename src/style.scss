@@ -174,6 +174,9 @@ html {
   display: block;
   position: absolute;
 
+  // render over skull
+  z-index: 1;
+
   // cap code
   .cap {
     // colours
@@ -291,6 +294,7 @@ html {
   grid-auto-rows: min-content;
   grid-template-rows: repeat(6, min-content);
   gap: 0px 0px;
+
   .shortcut {
     width: 100px;
     height: auto;
